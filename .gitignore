@@ -1,0 +1,34 @@
+#################
+## Misc
+#################
+**/.DS_Store
+node_modules/*
+npm-debug.log
+coverage
+
+#################
+## JetBrains
+#################
+.idea
+.project
+.settings
+.idea/*
+*.iml
+
+############
+## Windows
+############
+
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
+
+############
+## Mac
+############
+
+# Mac crap
+.DS_Store
+
