@@ -161,15 +161,15 @@ Example of Through Model:
 
 [MIT](LICENSE)
 
-[npm-image]: https://img.shields.io/npm/v/angulartics2.svg
-[npm-url]: https://npmjs.org/package/angulartics2
-[npm-downloads-image]: https://img.shields.io/npm/dm/angulartics2.svg
-[npm-downloads-url]: https://npmjs.org/package/angulartics2
-[bower-image]: https://img.shields.io/bower/v/angulartics2.svg
-[bower-url]: http://bower.io/search/?q=angulartics2
-[dep-status-image]: https://img.shields.io/david/angulartics/angulartics2.svg
-[dep-status-url]: https://david-dm.org/angulartics/angulartics2
+[npm-image]: https://img.shields.io/npm/v/loopback-include-through-mixin.svg
+[npm-url]: https://npmjs.org/package/loopback-include-through-mixin
+[npm-downloads-image]: https://img.shields.io/npm/dm/loopback-include-through-mixin.svg
+[npm-downloads-url]: https://npmjs.org/package/loopback-include-through-mixin
+[bower-image]: https://img.shields.io/bower/v/loopback-include-through-mixin.svg
+[bower-url]: http://bower.io/search/?q=loopback-include-through-mixin
+[dep-status-image]: https://img.shields.io/david/angulartics/loopback-include-through-mixin.svg
+[dep-status-url]: https://david-dm.org/angulartics/loopback-include-through-mixin
 [license-image]: http://img.shields.io/badge/license-MIT-blue.svg
 [license-url]: LICENSE
-[slack-image]: https://angulartics2.herokuapp.com/badge.svg
-[slack-url]: https://angulartics2.herokuapp.com
+[slack-image]: https://loopback-include-through-mixin.herokuapp.com/badge.svg
+[slack-url]: https://loopback-include-through-mixin.herokuapp.com
