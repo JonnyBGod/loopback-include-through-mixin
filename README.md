@@ -5,7 +5,7 @@
 [![Build Status](https://img.shields.io/travis/JonnyBGod/loopback-include-through-mixin/master.svg?style=flat)](https://travis-ci.org/JonnyBGod/loopback-include-through-mixin)
 
 [![MIT license][license-image]][license-url]
-[![Gitter Chat](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/JonnyBGod/loopback-include-through-mixin)
+[![Gitter Chat](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/loopback-include-through-mixin/Lobby)
 
 ##Features
 
