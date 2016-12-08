@@ -2,7 +2,7 @@
 
 module.exports = function(Model, options) {
   Model.on('attached', function() {
-    var relations = Model.relations;
+    var relations = Model.settings.relations || Model.relations;
 
     if (relations) {
       Object.keys(relations).forEach(function(targetModel) {
