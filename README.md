@@ -71,16 +71,16 @@ Then use in you queries like:
 
 ```json
 {
-  "where": "..."
-  "include": "..."
+  "where": "...",
+  "include": "...",
   "includeThrough": true
 }
 ```
 
 ```json
 {
-  "where": "..."
-  "include": "..."
+  "where": "...",
+  "include": "...",
   "includeThrough": {
     "fields": "type"
   }
