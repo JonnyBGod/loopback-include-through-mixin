@@ -71,18 +71,18 @@ Then use in you queries like:
 
 ```json
 {
-  where: ...
-  include: ...
-  includeThrough: true
+  "where": "..."
+  "include": "..."
+  "includeThrough": true
 }
 ```
 
 ```json
 {
-  where: ...
-  include: ...
-  includeThrough: {
-    fields: 'type'
+  "where": "..."
+  "include": "..."
+  "includeThrough": {
+    "fields": "type"
   }
 }
 ```
