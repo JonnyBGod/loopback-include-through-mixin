@@ -37,7 +37,7 @@ module.exports = function(Model, options) {
 
     var query = {where: {}};
     query.where[relationKey] = ctx.instance.id;
-    query.where[throughKey] = {inq: newResult.map(function(item) { return item.id; })};
+    query.where[throughKey] = {inq: newResult.map(function(item) { return item[idName]; })};
 
     if (
       ctx.args.filter &&
