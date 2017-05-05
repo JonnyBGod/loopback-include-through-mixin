@@ -24,7 +24,7 @@ module.exports = function(Model, options) {
 
     if (
       !(options.relations && options.relations.indexOf(relationName) !== -1) &&
-      !(ctx.args.filter && JSON.parse(ctx.args.filter).includeThrough)
+      !(ctx.args.filter && ctx.args.filter.includeThrough)
     ) return next();
 
     var relationKey = Model.relations[relationName].keyTo;
@@ -41,10 +41,10 @@ module.exports = function(Model, options) {
 
     if (
       ctx.args.filter &&
-      JSON.parse(ctx.args.filter).includeThrough &&
-      JSON.parse(ctx.args.filter).includeThrough.fields
+      ctx.args.filter.includeThrough &&
+      ctx.args.filter.includeThrough.fields
     ) {
-      query.fields = [throughKey, JSON.parse(ctx.args.filter).includeThrough.fields];
+      query.fields = [throughKey, ctx.args.filter.includeThrough.fields];
     } else if (options.fields && options.fields[relationName]) {
       query.fields = [throughKey, options.fields[relationName]];
     }
