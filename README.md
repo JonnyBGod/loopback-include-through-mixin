@@ -21,7 +21,6 @@ npm install loopback-include-through-mixin --save
 
 ##How to use
 
-
 Add the mixins property to your server/model-config.json like the following:
 
 ```json

@@ -13,7 +13,7 @@ app.set('remoting', {
 });
 app.use(loopback.rest());
 
-//WIP more tests
+// WIP more tests
 describe('IncludeThrough', function() {
   var server;
   var User = null;
@@ -26,17 +26,24 @@ describe('IncludeThrough', function() {
    **/
   db = app.dataSource('db', {adapter: 'memory'});
 
-  User = app.model('user', {
+  var UserModel = app.registry.createModel('user');
+
+  User = app.model(UserModel, {
     dataSource: 'db',
   });
 
-  App = app.model('app', {
+  var AppModel = app.registry.createModel('app');
+
+  App = app.model(AppModel, {
     dataSource: 'db',
   });
 
-  UserRole = app.model('userRole', {
+  var UserRoleModel = app.registry.createModel('userRole', {
     type: String,
     description: String,
+  });
+
+  UserRole = app.model(UserRoleModel, {
     dataSource: 'db',
   });
 
@@ -90,8 +97,8 @@ describe('IncludeThrough', function() {
         expect(res.text).to.equal(JSON.stringify([{
           id: 1,
           userRole: {
-            userId: 1,
             type: 'administrator',
+            userId: 1,
           },
         }]));
         done();
@@ -107,8 +114,8 @@ describe('IncludeThrough', function() {
         expect(res.text).to.equal(JSON.stringify([{
           id: 1,
           userRole: {
-            userId: 1,
             description: 'Can do whatever.',
+            userId: 1,
           },
         }]));
         done();
