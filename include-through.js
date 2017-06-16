@@ -12,13 +12,14 @@ module.exports = function(Model, options) {
 
         if (type === 'hasManyThrough') {
           Model.afterRemote('prototype.__get__' + targetModel, injectIncludes);
+          Model.afterRemote('prototype.__create__' + targetModel, injectIncludes);
         }
       });
     }
   });
 
   function injectIncludes(ctx, unused, next) {
-    if (!ctx.result || !ctx.result.length) return next();
+    if (!ctx.result) return next();
 
     var relationName = ctx.methodString.match(/__([a-z\d]+)$/)[1];
 
@@ -37,7 +38,12 @@ module.exports = function(Model, options) {
 
     var query = {where: {}};
     query.where[relationKey] = ctx.instance.id;
-    query.where[throughKey] = {inq: newResult.map(function(item) { return item[idName]; })};
+
+    if (Array.isArray(newResult)) {
+      query.where[throughKey] = {inq: newResult.map(function(item) { return item[idName]; })};
+    } else {
+      query.where[throughKey] = {inq: [newResult[idName]]};
+    }
 
     if (
       ctx.args.filter &&
@@ -57,10 +63,15 @@ module.exports = function(Model, options) {
         resultsHash[result[throughKey].toString()] = result;
       });
 
-      for (var i = 0; i < newResult.length; i++) {
-        if (resultsHash[newResult[i][idName].toString()]) {
-          newResult[i][throughModel.definition.name] = resultsHash[newResult[i][idName].toString()];
+      if (Array.isArray(newResult)) {
+        for (var i = 0; i < newResult.length; i++) {
+          if (resultsHash[newResult[i][idName].toString()]) {
+            newResult[i][throughModel.definition.name] =
+              resultsHash[newResult[i][idName].toString()];
+          }
         }
+      } else {
+        newResult[throughModel.definition.name] = resultsHash[newResult[idName].toString()];
       }
 
       ctx.result = newResult;
