@@ -150,11 +150,15 @@ Example of Through Model:
 
 | option | type | description | required |
 | ------ | ---- | ----------- | -------- |
-|relations| [String] | select relations | false |
+|relations| [String, Object] | select relations, can be object with property "name" and "asProperty" | false |
+|relations[0].name|String|name of the relation |false|
+|relations[0].asProperty|String|rename the property that through model will be injected to, default is name of the through model |false|
 |fields| Key/Value Object |  similar to filter fields. Key: relation; Value: fields filter. | false |
 
+
+
 - By setting relations in model definition it will return the though model for the specified relations by default
-- By passing **includeThrough** in you query filter it will override default **fields**
+- By passing **includeThrough** in you query filter it will ov erride default **fields**
 
 ## License
 

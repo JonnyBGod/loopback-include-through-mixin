@@ -58,7 +58,8 @@ describe('IncludeThrough', function() {
    */
   IncludeThrough(App, {
     relations: [
-      'users',
+      // 'users'
+      { name: 'users', asProperty: 'userRole' },
     ],
     fields: {
       users: 'type',
@@ -118,6 +119,144 @@ describe('IncludeThrough', function() {
             userId: 1,
           },
         }]));
+        done();
+      });
+  });
+
+  it('should get app normally (base case)', function(done) {
+    request(server).get('/apps/1')
+      .expect(200)
+      .query({
+        filter: JSON.stringify({
+          include: ''
+        })
+      })
+      .end(function(err, res) {
+        if (err) return done(err);
+
+        expect(res.text).to.equal(JSON.stringify({ id: 1 }));
+        done();
+      });
+  });
+
+  it('should include through model properties by default (findById)', function(done) {
+    request(server).get('/apps/1')
+      .expect(200)
+      .query({
+        filter: JSON.stringify({
+          include: 'users'
+        })
+      })
+      .end(function(err, res) {
+        if (err) return done(err);
+
+        expect(res.text).to.equal(JSON.stringify({
+          id: 1,
+          users: [
+            {
+              id: 1,
+              userRole: {
+                type: 'administrator',
+                userId: 1,
+              }
+            }
+          ]
+        }));
+        done();
+      });
+  });
+
+  it('should include through model properties by default (findById)', function(done) {
+    request(server).get('/apps/1')
+      .expect(200)
+      .query({
+        filter: JSON.stringify({
+          include: 'users',
+          includeThrough: {
+            fields: 'description'
+          }
+        })
+      })
+      .end(function(err, res) {
+        if (err) return done(err);
+
+        expect(res.text).to.equal(JSON.stringify({
+          id: 1,
+          users: [
+            {
+              id: 1,
+              userRole: {
+                description: 'Can do whatever.',
+                userId: 1,
+              }
+            }
+          ]
+        }));
+        done();
+      });
+  });
+
+  it('should include through model properties by default (findById), include filter as object', function(done) {
+    request(server).get('/apps/1')
+      .expect(200)
+      .query({
+        filter: JSON.stringify({
+          include: {
+            users: ''
+          }
+        })
+      })
+      .end(function(err, res) {
+        if (err) return done(err);
+
+        expect(res.text).to.equal(JSON.stringify({
+          id: 1,
+          users: [
+            {
+              id: 1,
+              userRole: {
+                type: 'administrator',
+                userId: 1,
+              }
+            }
+          ]
+        }));
+        done();
+      });
+  });
+
+  it('should include through model properties by default (findById), include filter as array', function(done) {
+    request(server).get('/apps/1')
+      .expect(200)
+      .query({
+        filter: JSON.stringify({
+          include: [{
+            users: ''
+          }, 'users']
+        })
+      })
+      .end(function(err, res) {
+        if (err) return done(err);
+
+        expect(res.text).to.equal(JSON.stringify({
+          id: 1,
+          users: [
+            {
+              id: 1,
+              userRole: {
+                type: 'administrator',
+                userId: 1,
+              }
+            },
+            {
+              id: 1,
+              userRole: {
+                type: 'administrator',
+                userId: 1,
+              }
+            }
+          ]
+        }));
         done();
       });
   });
