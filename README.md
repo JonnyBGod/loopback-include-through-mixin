@@ -7,19 +7,19 @@
 [![MIT license][license-image]][license-url]
 [![Gitter Chat](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/loopback-include-through-mixin/Lobby)
 
-##Features
+## Features
 
 - include though model properties with queries
 - setup default bahavior
 - use as mixin
 
-##Installation
+## Installation
 
 ```bash
 npm install loopback-include-through-mixin --save
 ```
 
-##How to use
+## How to use
 
 Add the mixins property to your server/model-config.json like the following:
 
@@ -146,7 +146,7 @@ Example of Through Model:
 }
 ```
 
-##Options
+## Options
 
 | option | type | description | required |
 | ------ | ---- | ----------- | -------- |
@@ -158,7 +158,7 @@ Example of Through Model:
 
 
 - By setting relations in model definition it will return the though model for the specified relations by default
-- By passing **includeThrough** in you query filter it will ov erride default **fields**
+- By passing **includeThrough** in you query filter it will override default **fields**
 
 ## License
 
