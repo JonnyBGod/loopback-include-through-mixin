@@ -58,7 +58,8 @@ describe('IncludeThrough', function() {
    */
   IncludeThrough(App, {
     relations: [
-      'users',
+      // 'users'
+      { name: 'users', asProperty: 'userRole' },
     ],
     fields: {
       users: 'type',
