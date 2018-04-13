@@ -31,7 +31,7 @@ module.exports = function(Model, options) {
   function controller(ctx, unused, next) {
     if (ctx.methodString.indexOf('prototype.__get__') !== -1) {
       // the original version
-      var relationName = ctx.methodString.match(/__([a-z\d]+)$/)[1];
+      var relationName = ctx.methodString.match(/__([a-zA-Z]+)$/)[1];
       var partialResult = JSON.parse(JSON.stringify(ctx.result));
       injectIncludes(ctx, partialResult, relationName).then(function(partialResult) {
         ctx.result = partialResult;
