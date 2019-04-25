@@ -2,15 +2,15 @@
 
 const _ = require('lodash');
 
-module.exports = function(Model, options) {
+module.exports = function (Model, options) {
   var modelHasManyThroughRelations, modelRelations;
 
-  Model.on('attached', function() {
+  Model.on('attached', function () {
     modelRelations = Model.settings.relations || Model.relations;
 
     if (modelRelations) {
       modelHasManyThroughRelations = [];
-      Object.keys(modelRelations).forEach(function(targetModel) {
+      Object.keys(modelRelations).forEach(function (targetModel) {
         var type =
           (modelRelations[targetModel].modelThrough || modelRelations[targetModel].through) ?
             'hasManyThrough' : modelRelations[targetModel].type;
@@ -24,6 +24,7 @@ module.exports = function(Model, options) {
 
       if (modelHasManyThroughRelations.length) {
         Model.afterRemote('findById', controller);
+        Model.afterRemote('find', controller);
       }
     }
   });
@@ -33,14 +34,13 @@ module.exports = function(Model, options) {
       // the original version
       var relationName = ctx.methodString.match(/__([a-zA-Z]+)$/)[1];
       var partialResult = JSON.parse(JSON.stringify(ctx.result));
-      injectIncludes(ctx, partialResult, relationName).then(function(partialResult) {
+      injectIncludes(ctx, partialResult, relationName).then(function (partialResult) {
         ctx.result = partialResult;
         next();
       });
     } else {
       // extension
       var newResult = JSON.parse(JSON.stringify(ctx.result));
-
       var filter = ctx.req && ctx.req.query && ctx.req.query.filter;
       if (filter) {
         if (typeof filter === 'string') {
@@ -72,10 +72,19 @@ module.exports = function(Model, options) {
         let promises = [];
         for (let relationName of relationNames) {
           if (modelHasManyThroughRelations.includes(relationName)) {
-            let partialResult = newResult[relationName];
+            let partialResult;
+            if (_.isArray(newResult)) {
+              partialResult = [];
+              for (let i = 0; i < newResult.length; i++) {
+                partialResult.push(newResult[i][relationName]);
+              }
+            } else {
+              partialResult = newResult[relationName];
+            }
+
             let promise = injectIncludes(ctx, partialResult, relationName)
-              .then(function(partialResult) {
-                return new Promise(function(res, rej) {
+              .then(function (partialResult) {
+                return new Promise(function (res, rej) {
                   newResult[relationName] = partialResult;
                   res();
                 });
@@ -84,7 +93,7 @@ module.exports = function(Model, options) {
           }
         }
         if (promises.length) {
-          Promise.all(promises).then(function() {
+          Promise.all(promises).then(function () {
             ctx.result = newResult;
             next();
           });
@@ -98,10 +107,10 @@ module.exports = function(Model, options) {
   }
 
   function injectIncludes(ctx, partialResult, relationName) {
-    return new Promise(function(res, rej) {
+    return new Promise(function (res, rej) {
       var relationSetting, isRelationRegistered;
       if (options.relations) {
-        relationSetting = _.find(options.relations, {name: relationName});
+        relationSetting = _.find(options.relations, { name: relationName });
         if (relationSetting) {
           isRelationRegistered = true;
         } else if (options.relations.indexOf(relationName) !== -1) {
@@ -112,7 +121,7 @@ module.exports = function(Model, options) {
           isRelationRegistered = false;
         }
       }
-      if (!isRelationRegistered  && !(ctx.args.filter && ctx.args.filter.includeThrough)) {
+      if (!isRelationRegistered && !(ctx.args.filter && ctx.args.filter.includeThrough)) {
         return res(partialResult);
       }
 
@@ -126,7 +135,7 @@ module.exports = function(Model, options) {
       }
       var idName = relationModel.definition.idName() || 'id';
 
-      var query = {where: {}};
+      var query = { where: {} };
       if (ctx.instance) {
         query.where[relationKey] = ctx.instance.id;
       } else {
@@ -134,9 +143,19 @@ module.exports = function(Model, options) {
       }
 
       if (Array.isArray(partialResult)) {
-        query.where[throughKey] = {inq: partialResult.map(function(item) { return item[idName]; })};
+        query.where[throughKey] = {
+          inq: partialResult.map(function (item) {
+            if (_.isArray(item)) {
+              return item.map(function (it) {
+                return it[idName];
+              });
+            } else {
+              return item[idName];
+            }
+          })
+        };
       } else {
-        query.where[throughKey] = {inq: [partialResult[idName]]};
+        query.where[throughKey] = { inq: [partialResult[idName]] };
       }
 
       if (
@@ -149,20 +168,29 @@ module.exports = function(Model, options) {
         query.fields = [throughKey, options.fields[relationSetting.name]];
       }
 
-      throughModel.find(query, function(err, results) {
+      throughModel.find(query, function (err, results) {
         if (err) return res(partialResult);
         else {
           var throughPropertyName = relationSetting.asProperty || throughModel.definition.name;
           var resultsHash = {};
-          results.forEach(function(result) {
+          results.forEach(function (result) {
             resultsHash[result[throughKey].toString()] = result;
           });
 
           if (Array.isArray(partialResult)) {
             for (var i = 0; i < partialResult.length; i++) {
-              if (resultsHash[partialResult[i][idName].toString()]) {
-                partialResult[i][throughPropertyName] =
-                  resultsHash[partialResult[i][idName].toString()];
+              if (_.isArray(partialResult[i])) {
+                for (let j = 0; j < partialResult[i].length; j++) {
+                  if (resultsHash[partialResult[i][j][idName].toString()]) {
+                    partialResult[i][j][throughPropertyName] =
+                      resultsHash[partialResult[i][j][idName].toString()];
+                  }
+                }
+              } else {
+                if (resultsHash[partialResult[i][idName].toString()]) {
+                  partialResult[i][throughPropertyName] =
+                    resultsHash[partialResult[i][idName].toString()];
+                }
               }
             }
           } else {
