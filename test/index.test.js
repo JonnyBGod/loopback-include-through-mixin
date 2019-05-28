@@ -1,7 +1,7 @@
 'use strict';
 
 var loopback = require('loopback');
-var IncludeThrough = require('../include-through.js');
+var IncludeThrough = require('../include-through');
 var expect  = require('chai').expect;
 var request = require('supertest');
 var app = loopback();
@@ -59,7 +59,7 @@ describe('IncludeThrough', function() {
   IncludeThrough(App, {
     relations: [
       // 'users'
-      { name: 'users', asProperty: 'userRole' },
+      {name: 'users', asProperty: 'userRole'},
     ],
     fields: {
       users: 'type',
@@ -128,13 +128,13 @@ describe('IncludeThrough', function() {
       .expect(200)
       .query({
         filter: JSON.stringify({
-          include: ''
-        })
+          include: '',
+        }),
       })
       .end(function(err, res) {
         if (err) return done(err);
 
-        expect(res.text).to.equal(JSON.stringify({ id: 1 }));
+        expect(res.text).to.equal(JSON.stringify({id: 1}));
         done();
       });
   });
@@ -144,8 +144,8 @@ describe('IncludeThrough', function() {
       .expect(200)
       .query({
         filter: JSON.stringify({
-          include: 'users'
-        })
+          include: 'users',
+        }),
       })
       .end(function(err, res) {
         if (err) return done(err);
@@ -158,9 +158,9 @@ describe('IncludeThrough', function() {
               userRole: {
                 type: 'administrator',
                 userId: 1,
-              }
-            }
-          ]
+              },
+            },
+          ],
         }));
         done();
       });
@@ -173,9 +173,9 @@ describe('IncludeThrough', function() {
         filter: JSON.stringify({
           include: 'users',
           includeThrough: {
-            fields: 'description'
-          }
-        })
+            fields: 'description',
+          },
+        }),
       })
       .end(function(err, res) {
         if (err) return done(err);
@@ -188,9 +188,9 @@ describe('IncludeThrough', function() {
               userRole: {
                 description: 'Can do whatever.',
                 userId: 1,
-              }
-            }
-          ]
+              },
+            },
+          ],
         }));
         done();
       });
@@ -202,9 +202,9 @@ describe('IncludeThrough', function() {
       .query({
         filter: JSON.stringify({
           include: {
-            users: ''
-          }
-        })
+            users: '',
+          },
+        }),
       })
       .end(function(err, res) {
         if (err) return done(err);
@@ -217,9 +217,9 @@ describe('IncludeThrough', function() {
               userRole: {
                 type: 'administrator',
                 userId: 1,
-              }
-            }
-          ]
+              },
+            },
+          ],
         }));
         done();
       });
@@ -231,9 +231,9 @@ describe('IncludeThrough', function() {
       .query({
         filter: JSON.stringify({
           include: [{
-            users: ''
-          }, 'users']
-        })
+            users: '',
+          }, 'users'],
+        }),
       })
       .end(function(err, res) {
         if (err) return done(err);
@@ -246,16 +246,16 @@ describe('IncludeThrough', function() {
               userRole: {
                 type: 'administrator',
                 userId: 1,
-              }
+              },
             },
             {
               id: 1,
               userRole: {
                 type: 'administrator',
                 userId: 1,
-              }
-            }
-          ]
+              },
+            },
+          ],
         }));
         done();
       });
