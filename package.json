@@ -1,6 +1,6 @@
 {
   "name": "loopback-include-through-mixin",
-  "version": "0.0.0-development",
+  "version": "1.1.2",
   "description": "A mixin to enable including Through model properties",
   "main": "include-through.js",
   "scripts": {
