@@ -39,7 +39,26 @@ Add the mixins property to your server/model-config.json like the following:
     ]
   }
 }
+```
 
+or
+
+```json
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback-include-through-mixin/lib",
+      "../common/mixins"
+    ]
+  }
+}
 ```
 
 To use with your Models add the mixins attribute to the definition object of your model config.
