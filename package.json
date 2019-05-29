@@ -11,16 +11,16 @@
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "commitizen": "^2.8.6",
+    "chai": "^4.2.0",
+    "commitizen": "^3.1.1",
     "cz-conventional-changelog": "^2.1.0",
-    "eslint": "^4.11.0",
-    "eslint-config-loopback": "^8.0.0",
-    "loopback": "^3.16.2",
-    "loopback-datasource-juggler": "^3.13.0",
-    "mocha": "^4.0.1",
-    "semantic-release": "^8.2.0",
-    "supertest": "^3.0.0"
+    "eslint": "^5.16.0",
+    "eslint-config-loopback": "^13.1.0",
+    "loopback": "^3.25.1",
+    "loopback-datasource-juggler": "^4.7.1",
+    "mocha": "^6.1.4",
+    "semantic-release": "^15.13.12",
+    "supertest": "^4.0.2"
   },
   "repository": {
     "type": "git",
@@ -44,6 +44,6 @@
     }
   },
   "dependencies": {
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.11"
   }
 }
