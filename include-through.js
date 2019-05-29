@@ -24,6 +24,7 @@ module.exports = function(Model, options) {
 
       if (modelHasManyThroughRelations.length) {
         Model.afterRemote('findById', controller);
+        Model.afterRemote('find', controller);
       }
     }
   });
@@ -40,7 +41,6 @@ module.exports = function(Model, options) {
     } else {
       // extension
       var newResult = JSON.parse(JSON.stringify(ctx.result));
-
       var filter = ctx.req && ctx.req.query && ctx.req.query.filter;
       if (filter) {
         if (typeof filter === 'string') {
@@ -72,7 +72,16 @@ module.exports = function(Model, options) {
         let promises = [];
         for (let relationName of relationNames) {
           if (modelHasManyThroughRelations.includes(relationName)) {
-            let partialResult = newResult[relationName];
+            let partialResult;
+            if (_.isArray(newResult)) {
+              partialResult = [];
+              for (let i = 0; i < newResult.length; i++) {
+                partialResult.push(newResult[i][relationName]);
+              }
+            } else {
+              partialResult = newResult[relationName];
+            }
+
             let promise = injectIncludes(ctx, partialResult, relationName)
               .then(function(partialResult) {
                 return new Promise(function(res, rej) {
@@ -112,7 +121,7 @@ module.exports = function(Model, options) {
           isRelationRegistered = false;
         }
       }
-      if (!isRelationRegistered  && !(ctx.args.filter && ctx.args.filter.includeThrough)) {
+      if (!isRelationRegistered && !(ctx.args.filter && ctx.args.filter.includeThrough)) {
         return res(partialResult);
       }
 
@@ -134,7 +143,17 @@ module.exports = function(Model, options) {
       }
 
       if (Array.isArray(partialResult)) {
-        query.where[throughKey] = {inq: partialResult.map(function(item) { return item[idName]; })};
+        query.where[throughKey] = {
+          inq: partialResult.map(function(item) {
+            if (_.isArray(item)) {
+              return item.map(function(it) {
+                return it[idName];
+              });
+            } else {
+              return item[idName];
+            }
+          }),
+        };
       } else {
         query.where[throughKey] = {inq: [partialResult[idName]]};
       }
@@ -160,9 +179,18 @@ module.exports = function(Model, options) {
 
           if (Array.isArray(partialResult)) {
             for (var i = 0; i < partialResult.length; i++) {
-              if (resultsHash[partialResult[i][idName].toString()]) {
-                partialResult[i][throughPropertyName] =
-                  resultsHash[partialResult[i][idName].toString()];
+              if (_.isArray(partialResult[i])) {
+                for (let j = 0; j < partialResult[i].length; j++) {
+                  if (resultsHash[partialResult[i][j][idName].toString()]) {
+                    partialResult[i][j][throughPropertyName] =
+                      resultsHash[partialResult[i][j][idName].toString()];
+                  }
+                }
+              } else {
+                if (resultsHash[partialResult[i][idName].toString()]) {
+                  partialResult[i][throughPropertyName] =
+                    resultsHash[partialResult[i][idName].toString()];
+                }
               }
             }
           } else {
