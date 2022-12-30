@@ -23,7 +23,7 @@
     "eslint-config-loopback": "^13.1.0",
     "loopback": "^3.25.1",
     "loopback-datasource-juggler": "^4.7.1",
-    "mocha": "^6.1.4",
+    "mocha": "^10.2.0",
     "semantic-release": "^15.13.12",
     "supertest": "^4.0.2"
   },
